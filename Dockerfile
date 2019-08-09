@@ -1,5 +1,5 @@
-FROM gentoo/portage:latest as portage
-FROM gentoo/stage3-amd64:latest as gentoo
+FROM gentoo/portage:20190707 as portage
+FROM gentoo/stage3-amd64:20190706 as gentoo
 COPY --from=portage /usr/portage /usr/portage
 LABEL maintainer="andrew.potter@unep-wcmc.org"
 
@@ -39,6 +39,11 @@ RUN tar -xvf geos-3.7.0.tar.bz2
 RUN cd geos-3.7.0 \
     && ./configure --prefix=/usr \
     && make install
+
+RUN emerge media-libs/fontconfig
+RUN emerge sys-libs/zlib
+
+RUN npm install phantomjs-prebuilt -g --unsafe-perm
 
 ARG USER=unepwcmc
 ARG UID=1000
